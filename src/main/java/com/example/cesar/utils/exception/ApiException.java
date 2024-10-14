@@ -1,4 +1,4 @@
-package com.example.cesar.utils;
+package com.example.cesar.utils.exception;
 
 import org.springframework.http.HttpStatus;
 

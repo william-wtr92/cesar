@@ -32,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         // Creation of an instance of GrantedAuthority Class provided by Spring Security
         GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getName());
 
-        // Creation of an instance of User Class provided by Spring Security and we pass user: Email, Password & Role
+        // Creation of an instance of User Class provided by Spring Security, and we pass user: Email, Password & Role
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPasswordHash(), Collections.singleton(authority));
     }
 }

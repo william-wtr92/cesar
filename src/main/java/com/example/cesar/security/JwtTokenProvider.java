@@ -1,6 +1,6 @@
 package com.example.cesar.security;
 
-import com.example.cesar.utils.ApiException;
+import com.example.cesar.utils.exception.ApiException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -26,14 +26,12 @@ public class JwtTokenProvider {
         Date currentDate = new Date();
         Date expirationDate = new Date(currentDate.getTime() + jwtExpirationDate);
 
-        String token  = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(expirationDate)
                 .signWith(key())
                 .compact();
-
-        return token;
     }
 
     private Key key(){
@@ -49,29 +47,26 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
 
-        String username = claims.getSubject();
-
-        return username;
+        return claims.getSubject();
     }
 
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) {
         try {
             Jwts.parser()
                     .setSigningKey(key())
                     .build()
                     .parse(token);
-
             return true;
         } catch (ExpiredJwtException e) {
-            throw new ApiException("JWT Token is expired", HttpStatus.BAD_REQUEST);
+            throw new ApiException("JWT Token is expired", HttpStatus.FORBIDDEN);
         } catch (MalformedJwtException e) {
-            throw new ApiException("JWT Token is invalid", HttpStatus.BAD_REQUEST);
+            throw new ApiException("JWT Token is invalid", HttpStatus.FORBIDDEN);
         } catch (SecurityException e) {
-            throw new ApiException("JWT Token is not secure", HttpStatus.BAD_REQUEST);
+            throw new ApiException("JWT Token is not secure", HttpStatus.FORBIDDEN);
         } catch (IllegalArgumentException e) {
-            throw new ApiException("JWT Token claims string is empty", HttpStatus.BAD_REQUEST);
+            throw new ApiException("JWT Token claims string is empty", HttpStatus.FORBIDDEN);
         } catch (UnsupportedJwtException e) {
-            throw new ApiException("JWT Token unsupported", HttpStatus.BAD_REQUEST);
+            throw new ApiException("JWT Token unsupported", HttpStatus.FORBIDDEN);
         }
     }
 }

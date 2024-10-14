@@ -1,7 +1,9 @@
 package com.example.cesar.config;
 
+import com.example.cesar.entity.Classroom;
 import com.example.cesar.entity.Role;
 import com.example.cesar.entity.User;
+import com.example.cesar.repository.ClassroomRepository;
 import com.example.cesar.repository.RoleRepository;
 import com.example.cesar.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -15,7 +17,7 @@ import java.util.Date;
 public class DataInitializer {
 
     @Bean
-    CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, ClassroomRepository classroomRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             if (roleRepository.count() == 0) {
                 Role roleAdmin = new Role();
@@ -30,6 +32,16 @@ public class DataInitializer {
                 roleRepository.save(roleAdmin);
                 roleRepository.save(roleStudent);
                 roleRepository.save(roleModerator);
+            }
+
+            if (classroomRepository.count() == 0) {
+                Classroom classroom1 = new Classroom();
+                classroom1.setName("MSI-5-DEV-B");
+                classroomRepository.save(classroom1);
+
+                Classroom classroom2 = new Classroom();
+                classroom2.setName("MSI-5-DEV-A");
+                classroomRepository.save(classroom2);
             }
 
             if (userRepository.count() == 0) {
@@ -65,6 +77,7 @@ public class DataInitializer {
                 student.setBirthday(new Date());
                 student.setPhone("456789123");
                 student.setRole(studentRole);
+                student.setClassroom(classroomRepository.findByName("MSI-5-DEV-B"));
                 userRepository.save(student);
             }
         };

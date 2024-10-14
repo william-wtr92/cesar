@@ -30,4 +30,6 @@ public class UserRegisterDto {
     private Date birthday;
 
     private String phone;
+
+    private String classroomName;
 }
