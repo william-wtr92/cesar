@@ -1,11 +1,16 @@
 package com.example.cesar.service.impl;
 
+import com.example.cesar.dto.ClassroomCreateDto;
 import com.example.cesar.dto.UserClassroomDto;
+import com.example.cesar.entity.Classroom;
 import com.example.cesar.entity.User;
 import com.example.cesar.repository.ClassroomRepository;
 import com.example.cesar.repository.UserRepository;
 import com.example.cesar.service.ClassroomService;
+import com.example.cesar.utils.constants.RoleConstants;
 import com.example.cesar.utils.exception.ApiException;
+import org.apache.catalina.mapper.Mapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +18,25 @@ import org.springframework.stereotype.Service;
 public class ClassroomServiceImpl implements ClassroomService {
     private final UserRepository userRepository;
     private final ClassroomRepository classroomRepository;
+    private final ModelMapper mapper;
 
-    public ClassroomServiceImpl(UserRepository userRepository, ClassroomRepository classroomRepository) {
+    public ClassroomServiceImpl(UserRepository userRepository, ClassroomRepository classroomRepository, ModelMapper mapper) {
         this.userRepository = userRepository;
         this.classroomRepository = classroomRepository;
+        this.mapper = mapper;
+    }
+
+    @Override
+    public String createClassroom(ClassroomCreateDto classroomCreateDto) {
+        if(classroomRepository.existsByName(classroomCreateDto.getName())) {
+            throw new ApiException("Classroom already exist", HttpStatus.BAD_REQUEST);
+        }
+
+        Classroom classroom = mapper.map(classroomCreateDto, Classroom.class);
+
+        classroomRepository.save(classroom);
+
+        return "Classroom successfully created";
     }
 
     @Override
