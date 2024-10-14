@@ -21,28 +21,15 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
-
         String response = userService.register(userRegisterDto);
-
-        if(response.equals("User already exists")) {
-            ApiResponse apiResponse = new ApiResponse("User already exists", HttpStatus.CONFLICT.value(), false);
-            return new ResponseEntity<>(apiResponse, HttpStatus.CONFLICT);
-        }
-
-        ApiResponse apiResponse = new ApiResponse("User registered successfully!", HttpStatus.CREATED.value(), true);
+        ApiResponse apiResponse = new ApiResponse(response, HttpStatus.CREATED.value(), true);
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody UserLoginDto userLoginDto) {
         String token = userService.login(userLoginDto);
-
-        if(token == null) {
-            ApiResponse apiResponse = new ApiResponse("Invalid credentials", HttpStatus.UNAUTHORIZED.value(), false);
-            return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
-        }
-
-        LoginResponse loginResponse = new LoginResponse("User logged in successfully!", HttpStatus.OK.value(), true, token);
+        LoginResponse loginResponse = new LoginResponse("Logged in!", HttpStatus.OK.value(), true, token);
         return new ResponseEntity<>(loginResponse, HttpStatus.OK);
     }
 }
