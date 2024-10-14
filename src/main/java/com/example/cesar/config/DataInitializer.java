@@ -21,14 +21,14 @@ public class DataInitializer {
                 Role roleAdmin = new Role();
                 roleAdmin.setName("admin");
 
-                Role roleUser = new Role();
-                roleUser.setName("user");
+                Role roleStudent = new Role();
+                roleStudent.setName("student");
 
                 Role roleModerator = new Role();
                 roleModerator.setName("teacher");
 
                 roleRepository.save(roleAdmin);
-                roleRepository.save(roleUser);
+                roleRepository.save(roleStudent);
                 roleRepository.save(roleModerator);
             }
 

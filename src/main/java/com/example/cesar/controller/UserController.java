@@ -1,8 +1,10 @@
 package com.example.cesar.controller;
 
+import com.example.cesar.dto.UserLoginDto;
 import com.example.cesar.dto.UserRegisterDto;
 import com.example.cesar.service.UserService;
-import com.example.cesar.utils.ApiResponse;
+import com.example.cesar.utils.response.ApiResponse;
+import com.example.cesar.utils.response.LoginResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,5 +31,18 @@ public class UserController {
 
         ApiResponse apiResponse = new ApiResponse("User registered successfully!", HttpStatus.CREATED.value(), true);
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse> login(@Valid @RequestBody UserLoginDto userLoginDto) {
+        String token = userService.login(userLoginDto);
+
+        if(token == null) {
+            ApiResponse apiResponse = new ApiResponse("Invalid credentials", HttpStatus.UNAUTHORIZED.value(), false);
+            return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+        }
+
+        LoginResponse loginResponse = new LoginResponse("User logged in successfully!", HttpStatus.OK.value(), true, token);
+        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
     }
 }

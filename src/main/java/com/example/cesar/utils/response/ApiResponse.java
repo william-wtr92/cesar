@@ -1,4 +1,4 @@
-package com.example.cesar.utils;
+package com.example.cesar.utils.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
