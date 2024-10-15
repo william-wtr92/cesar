@@ -30,5 +30,6 @@ Web API for managing courses, students, teachers and documents.
 - [x] Automatic put student absent
 - [x] Add a document
 - [x] Download a document
+- [x] Add note to a student for a specific course
 - [x] Send an email to a list of students
 - [x] Errors Handling

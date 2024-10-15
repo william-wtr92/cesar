@@ -25,8 +25,8 @@ public class GradeController {
     @PreAuthorize("hasRole('"+ RoleConstants.ROLE_TEACHER +"')")
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addGrade(@Valid @RequestBody GradeDto gradeDto, @AuthenticationPrincipal UserDetails userDetails) {
-        gradeService.addGrade(gradeDto, userDetails);
-        ApiResponse apiResponse = new ApiResponse("Grade added successfully", HttpStatus.CREATED.value(), true);
+        String response = gradeService.addGrade(gradeDto, userDetails);
+        ApiResponse apiResponse = new ApiResponse(response, HttpStatus.CREATED.value(), true);
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
