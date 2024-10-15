@@ -8,13 +8,16 @@ import com.example.cesar.entity.User;
 import com.example.cesar.repository.ClassroomRepository;
 import com.example.cesar.repository.CourseRepository;
 import com.example.cesar.repository.UserRepository;
+import com.example.cesar.service.AzureService;
 import com.example.cesar.service.CourseService;
 import com.example.cesar.utils.exception.ApiException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.Option;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,12 +27,14 @@ public class CourseServiceImpl implements CourseService {
     private final UserRepository userRepository;
     private final ClassroomRepository classroomRepository;
     private final ModelMapper mapper;
+    private final AzureService azureService;
 
-    public CourseServiceImpl(CourseRepository courseRepository, UserRepository userRepository, ClassroomRepository classroomRepository, ModelMapper mapper) {
+    public CourseServiceImpl(CourseRepository courseRepository, UserRepository userRepository, ClassroomRepository classroomRepository, ModelMapper mapper, AzureService azureService) {
         this.courseRepository = courseRepository;
         this.userRepository = userRepository;
         this.classroomRepository = classroomRepository;
         this.mapper = mapper;
+        this.azureService = azureService;
     }
 
     @Override
@@ -96,5 +101,25 @@ public class CourseServiceImpl implements CourseService {
         List<Course> courses = courseRepository.findAll();
 
         return courses;
+    }
+
+    @Override
+    public String uploadFile(MultipartFile file, Long courseId, UserDetails userDetails) {
+        Course course = courseRepository.findById(courseId).orElseThrow(() -> new ApiException("Course not found", HttpStatus.NOT_FOUND));
+
+        if(!course.getTeacher().getEmail().equals(userDetails.getUsername())) {
+            throw new ApiException("You are not the teacher of this course", HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            String url = azureService.uploadFile(file);
+
+            course.getUrlFiles().add(url);
+            courseRepository.save(course);
+
+            return "File uploaded successfully";
+        } catch (IOException e) {
+            throw new ApiException("Error uploading file", HttpStatus.BAD_REQUEST);
+        }
     }
 }

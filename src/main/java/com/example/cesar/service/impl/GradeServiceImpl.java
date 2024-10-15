@@ -59,6 +59,10 @@ public class GradeServiceImpl implements GradeService {
             throw new ApiException("Course not found", HttpStatus.NOT_FOUND);
         }
 
+        if(!courseOpt.get().getTeacher().getEmail().equals(userDetails.getUsername())) {
+            throw new ApiException("You are not the teacher of this course", HttpStatus.UNAUTHORIZED);
+        }
+
         Classroom classroom = courseOpt.get().getClassroom();
 
         if(!classroom.getStudents().contains(studentOpt.get())){
