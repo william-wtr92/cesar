@@ -15,12 +15,15 @@ public class CourseCreateDto {
     @NotEmpty(message = "Course name is required")
     private String name;
 
-    @NotEmpty(message = "Classroom name is required")
-    private String classroomName;
-
     @NotNull(message = "Classroom debut date is required")
     private Date startDate;
 
     @NotNull(message = "Classroom end date is required")
     private Date endDate;
+
+    @NotEmpty(message = "Classroom name is required")
+    private String classroomName;
+
+    @NotNull(message = "Teacher email is required")
+    private String teacherEmail;
 }
