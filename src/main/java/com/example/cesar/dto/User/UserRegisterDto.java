@@ -1,4 +1,4 @@
-package com.example.cesar.dto;
+package com.example.cesar.dto.User;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;

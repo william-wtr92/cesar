@@ -1,15 +1,13 @@
 package com.example.cesar.service.impl;
 
 import com.example.cesar.dto.ClassroomCreateDto;
-import com.example.cesar.dto.UserClassroomDto;
+import com.example.cesar.dto.User.UserClassroomDto;
 import com.example.cesar.entity.Classroom;
 import com.example.cesar.entity.User;
 import com.example.cesar.repository.ClassroomRepository;
 import com.example.cesar.repository.UserRepository;
 import com.example.cesar.service.ClassroomService;
-import com.example.cesar.utils.constants.RoleConstants;
 import com.example.cesar.utils.exception.ApiException;
-import org.apache.catalina.mapper.Mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

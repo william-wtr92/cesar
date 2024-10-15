@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
 @Entity
 @Table(name = "grades")
 public class Grade {
@@ -29,9 +30,9 @@ public class Grade {
     private User student;
 
     @ManyToOne
-    @JoinColumn(name = "classroom_id", referencedColumnName = "id", nullable = false)
-    private Classroom classroom;
+    @JoinColumn(name = "course_id", referencedColumnName = "id", nullable = false)
+    private Course course;
 
     @Column(nullable = false)
-    private String subject;
+    private String review;
 }

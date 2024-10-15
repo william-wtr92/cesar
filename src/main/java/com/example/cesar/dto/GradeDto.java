@@ -13,17 +13,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GradeDto {
 
-    @NotNull(message = "La note est obligatoire")
-    @Min(value = 0, message = "La note ne peut pas être inférieure à 0")
-    @Max(value = 20, message = "La note ne peut pas être supérieure à 20")
+    @NotNull(message = "Grade is required")
+    @Min(value = 0, message = "Grade must be between 0 and 20")
+    @Max(value = 20, message = "Grade must be between 0 and 20")
     private int grade;
 
-    @NotEmpty(message = "Le sujet est obligatoire")
-    private String subject;
+    @NotEmpty(message = "Review is required")
+    private String review;
 
-    @NotNull(message = "L'ID de l'étudiant est obligatoire")
-    private Long studentId;
+    @NotNull(message = "Student is required")
+    private String studentEmail;
 
-    @NotNull(message = "L'ID de la classe est obligatoire")
-    private Long classroomId;
+    @NotNull(message = "CourseId is required")
+    private Long courseId;
 }
