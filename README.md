@@ -18,5 +18,5 @@ Web API for managing courses, students, teachers and documents.
 - [ ] Add a teacher to a course
 - [ ] Take attendance
 - [ ] Add a document
-- [ ] Send an email to a list of students
+- [x] Send an email to a list of students
 - [x] Errors Handling
