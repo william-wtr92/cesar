@@ -1,1 +1,22 @@
 # Cesar API - Spring Boot
+
+Web API for managing courses, students, teachers and documents.
+
+# Features 
+
+- [x] Register
+- [x] Login
+- [ ] Add a classroom
+- [x] Update user classroom
+- [ ] Add a course
+- [ ] Delete a course
+- [ ] Edit a course
+- [ ] Retrieve a course
+- [ ] List all courses
+- [ ] Filter courses by date and program
+- [ ] Add a student to a course
+- [ ] Add a teacher to a course
+- [ ] Take attendance
+- [ ] Add a document
+- [ ] Send an email to a list of students
+- [x] Errors Handling

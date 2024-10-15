@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -70,16 +71,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String login(UserLoginDto userDto) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                userDto.getEmail(), userDto.getPassword()
-        ));
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword())
+            );
 
-        // Save into the Spring Security Context the auth of the user grab below
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            // Save into the Spring Security Context the auth of the user grab below
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Create a token for the user
-        String token = jwtTokenProvider.generateToken(authentication);
-
-        return token;
+            // Create a token for the user
+            return jwtTokenProvider.generateToken(authentication);
+        } catch (AuthenticationException ex) {
+            throw new ApiException("Invalid email or password", HttpStatus.UNAUTHORIZED);
+        }
     }
+
 }
