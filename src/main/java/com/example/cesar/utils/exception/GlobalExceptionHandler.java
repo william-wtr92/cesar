@@ -1,6 +1,5 @@
-package com.example.cesar.utils;
+package com.example.cesar.utils.exception;
 
-import com.example.cesar.utils.exception.*;
 import com.example.cesar.utils.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
