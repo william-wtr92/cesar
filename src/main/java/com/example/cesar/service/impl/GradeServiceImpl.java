@@ -36,7 +36,7 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public Grade addGrade(GradeDto gradeDto, UserDetails userDetails) {
+    public String addGrade(GradeDto gradeDto, UserDetails userDetails) {
         String email = userDetails.getUsername();
         User teacher = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ApiException("Teacher not found", HttpStatus.NOT_FOUND));
@@ -79,6 +79,8 @@ public class GradeServiceImpl implements GradeService {
         grade.setStudent(studentOpt.get());
         grade.setCourse(courseOpt.get());
 
-        return gradeRepository.save(grade);
+        gradeRepository.save(grade);
+
+        return "Grade added successfully";
     }
 }
