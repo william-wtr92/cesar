@@ -1,19 +1,24 @@
 package com.example.cesar.controller;
 
 import com.example.cesar.dto.Course.CourseCreateDto;
+import com.example.cesar.dto.Course.CourseGetSingleDto;
+import com.example.cesar.entity.Course;
 import com.example.cesar.service.CourseService;
 import com.example.cesar.utils.constants.RoleConstants;
+import com.example.cesar.utils.response.AllCourseResponse;
 import com.example.cesar.utils.response.ApiResponse;
+import com.example.cesar.utils.response.SingleCourseResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 
 @RestController
+@PreAuthorize("hasRole('"+ RoleConstants.ROLE_ADMIN +"')")
 @RequestMapping("/api/courses")
 public class CourseController {
     private final CourseService courseService;
@@ -22,7 +27,22 @@ public class CourseController {
         this.courseService = courseService;
     }
 
-    @PreAuthorize("hasRole('"+ RoleConstants.ROLE_ADMIN +"')")
+    @GetMapping
+    public ResponseEntity<AllCourseResponse> getAllCourses() {
+        List<Course> courses = courseService.getCourses();
+        AllCourseResponse response = new AllCourseResponse("Courses successfully fetched", HttpStatus.OK.value(), true, courses);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping ("/single")
+    public ResponseEntity<SingleCourseResponse> getSingleCourse(@Valid @RequestBody CourseGetSingleDto courseGetSingleDto) {
+        Course course = courseService.getCourse(courseGetSingleDto);
+        SingleCourseResponse response = new SingleCourseResponse("Course successfully fetched", HttpStatus.OK.value(), true, course);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createClassroom(@Valid @RequestBody CourseCreateDto courseCreateDto) {
         String response = courseService.createCourse(courseCreateDto);

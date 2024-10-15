@@ -11,19 +11,13 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseCreateDto {
+public class CourseGetSingleDto {
     @NotEmpty(message = "Course name is required")
-    private String name;
-
-    @NotNull(message = "Classroom debut date is required")
-    private Date startDate;
-
-    @NotNull(message = "Classroom end date is required")
-    private Date endDate;
+    private String courseName;
 
     @NotEmpty(message = "Classroom name is required")
     private String classroomName;
 
-    @NotNull(message = "Teacher email is required")
-    private String teacherEmail;
+    @NotNull(message = "Start date is required")
+    private Date startDate;
 }
