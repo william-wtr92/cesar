@@ -115,7 +115,6 @@ public class UserServiceImpl implements UserService {
         }
 
         return "Email sent successfully!";
-
     }
 
     private void sendEmail(SendEmailDto sendEmailDto, String recipient) throws MessagingException, IOException {

@@ -11,6 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
@@ -60,12 +62,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public String getCourse() {
+    public Course getCourse() {
         return null;
     }
 
     @Override
-    public String getCourses() {
-        return null;
+    public List<Course> getCourses() {
+        List<Course> courses = courseRepository.findAll();
+
+        return courses;
     }
 }

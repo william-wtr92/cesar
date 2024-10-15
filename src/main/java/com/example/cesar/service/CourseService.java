@@ -1,6 +1,9 @@
 package com.example.cesar.service;
 
 import com.example.cesar.dto.Course.CourseCreateDto;
+import com.example.cesar.entity.Course;
+
+import java.util.List;
 
 public interface CourseService {
     String createCourse(CourseCreateDto courseCreateDto);
@@ -9,7 +12,7 @@ public interface CourseService {
 
     String deleteCourse();
 
-    String getCourse();
+    Course getCourse();
 
-    String getCourses();
+    List<Course> getCourses();
 }
