@@ -1,8 +1,7 @@
 package com.example.cesar.controller;
 
 import com.example.cesar.dto.ClassroomCreateDto;
-import com.example.cesar.dto.UserClassroomDto;
-import com.example.cesar.entity.Classroom;
+import com.example.cesar.dto.User.UserClassroomDto;
 import com.example.cesar.service.ClassroomService;
 import com.example.cesar.utils.constants.RoleConstants;
 import com.example.cesar.utils.response.ApiResponse;

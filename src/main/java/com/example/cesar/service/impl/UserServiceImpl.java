@@ -1,8 +1,8 @@
 package com.example.cesar.service.impl;
 
 import com.example.cesar.dto.SendEmailDto;
-import com.example.cesar.dto.UserLoginDto;
-import com.example.cesar.dto.UserRegisterDto;
+import com.example.cesar.dto.User.UserLoginDto;
+import com.example.cesar.dto.User.UserRegisterDto;
 import com.example.cesar.entity.Classroom;
 import com.example.cesar.entity.Role;
 import com.example.cesar.entity.User;

@@ -1,7 +1,7 @@
 package com.example.cesar.service;
 
 import com.example.cesar.dto.ClassroomCreateDto;
-import com.example.cesar.dto.UserClassroomDto;
+import com.example.cesar.dto.User.UserClassroomDto;
 
 public interface ClassroomService {
     String createClassroom(ClassroomCreateDto classroomCreateDto);

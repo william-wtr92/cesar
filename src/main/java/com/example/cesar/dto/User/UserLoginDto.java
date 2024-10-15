@@ -1,4 +1,4 @@
-package com.example.cesar.dto;
+package com.example.cesar.dto.User;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
