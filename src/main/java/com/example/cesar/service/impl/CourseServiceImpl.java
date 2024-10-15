@@ -31,7 +31,6 @@ public class CourseServiceImpl implements CourseService {
 
         Classroom currentClassroom = classroomRepository.findByName(courseCreateDto.getClassroomName());
 
-        // par nom et par id de la classe et par horaires (debut et fin)
         if(courseRepository.existsByNameAndClassroomIdAndStartDateAndEndDate(
                 courseCreateDto.getName(),
                 currentClassroom.getId(),
