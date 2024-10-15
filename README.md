@@ -6,9 +6,9 @@ Web API for managing courses, students, teachers and documents.
 
 - [x] Register
 - [x] Login
-- [ ] Add a classroom
+- [x] Add a classroom
 - [x] Update user classroom
-- [ ] Add a course
+- [x] Add a course
 - [ ] Delete a course
 - [ ] Edit a course
 - [ ] Retrieve a course
