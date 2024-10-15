@@ -31,5 +31,8 @@ Web API for managing courses, students, teachers and documents.
 - [x] Add a document
 - [x] Download a document
 - [x] Add note to a student for a specific course
-- [x] Send an email to a list of students
+- [ ] Update note
+- [ ] Delete note
+- [ ] Get All notes for a student
+- [x] Email a list of students
 - [x] Errors Handling
