@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 
 @Entity
-@Table(name= "course")
+@Table(name= "courses")
 public class Course {
     @Id
     @GeneratedValue
@@ -16,7 +18,11 @@ public class Course {
 
     private String name;
 
+    private Date startDate;
+
+    private Date endDate;
+
     @ManyToOne
-    @JoinColumn(name = "class_id", referencedColumnName = "id")
-    private Classroom specificClass;
+    @JoinColumn(name = "classroom_id", referencedColumnName = "id")
+    private Classroom classroom;
 }
