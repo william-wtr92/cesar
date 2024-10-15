@@ -1,6 +1,7 @@
 package com.example.cesar.controller;
 
-import com.example.cesar.dto.GradeDto;
+import com.example.cesar.dto.Grade.GradeDto;
+import com.example.cesar.dto.Grade.UpdateGradeDto;
 import com.example.cesar.service.GradeService;
 import com.example.cesar.utils.constants.RoleConstants;
 import com.example.cesar.utils.response.ApiResponse;
@@ -28,6 +29,22 @@ public class GradeController {
         String response = gradeService.addGrade(gradeDto, userDetails);
         ApiResponse apiResponse = new ApiResponse(response, HttpStatus.CREATED.value(), true);
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('"+ RoleConstants.ROLE_TEACHER +"')")
+    @PutMapping("/{gradeId}/update")
+    public ResponseEntity<ApiResponse> updateGrade(@PathVariable Long gradeId, @Valid @RequestBody UpdateGradeDto updateGradeDto, @AuthenticationPrincipal UserDetails userDetails) {
+        String response = gradeService.updateGrade(gradeId, updateGradeDto, userDetails);
+        ApiResponse apiResponse = new ApiResponse(response, HttpStatus.OK.value(), true);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('"+ RoleConstants.ROLE_TEACHER +"')")
+    @DeleteMapping("/{gradeId}/delete")
+    public ResponseEntity<ApiResponse> deleteGrade(@PathVariable Long gradeId, @AuthenticationPrincipal UserDetails userDetails) {
+        String response = gradeService.deleteGrade(gradeId, userDetails);
+        ApiResponse apiResponse = new ApiResponse(response, HttpStatus.OK.value(), true);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
 }

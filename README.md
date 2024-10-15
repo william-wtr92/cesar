@@ -31,8 +31,8 @@ Web API for managing courses, students, teachers and documents.
 - [x] Add a document
 - [x] Download a document
 - [x] Add grade to a student for a specific course
-- [ ] Update grade
-- [ ] Delete grade
+- [x] Update grade
+- [x] Delete grade
 - [ ] Get All grades for a student
 - [x] Email a list of students
 - [x] Errors Handling
