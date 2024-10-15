@@ -4,13 +4,17 @@ import com.example.cesar.dto.SendEmailDto;
 import com.example.cesar.dto.User.UserLoginDto;
 import com.example.cesar.dto.User.UserRegisterDto;
 import com.example.cesar.entity.Classroom;
+import com.example.cesar.entity.Course;
 import com.example.cesar.entity.Role;
 import com.example.cesar.entity.User;
 import com.example.cesar.repository.ClassroomRepository;
+import com.example.cesar.repository.CourseRepository;
 import com.example.cesar.repository.RoleRepository;
 import com.example.cesar.repository.UserRepository;
 import com.example.cesar.security.JwtTokenProvider;
+import com.example.cesar.service.AzureService;
 import com.example.cesar.service.UserService;
+import com.example.cesar.utils.constants.RoleConstants;
 import com.example.cesar.utils.exception.ApiException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -23,6 +27,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,23 +40,26 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final ClassroomRepository classroomRepository;
+    private final CourseRepository courseRepository;
     private final ModelMapper mapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
-
     private final JavaMailSender mailSender;
+    private final AzureService azureService;
 
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, ClassroomRepository classroomRepository, ModelMapper mapper, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, JavaMailSender mailSender) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, ClassroomRepository classroomRepository, CourseRepository courseRepository, ModelMapper mapper, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, JavaMailSender mailSender, AzureService azureService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.classroomRepository = classroomRepository;
+        this.courseRepository = courseRepository;
         this.mapper = mapper;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.mailSender = mailSender;
+        this.azureService = azureService;
     }
 
     @Override
@@ -133,6 +141,37 @@ public class UserServiceImpl implements UserService {
         }
 
         mailSender.send(mimeMessage);
+    }
+
+    @Override
+    public byte[] downloadFile(String fileName, Long courseId, UserDetails userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(()
+                -> new ApiException("User not found", HttpStatus.NOT_FOUND));
+
+        Course course = courseRepository.findById(courseId).orElseThrow(()
+                -> new ApiException("Course not found", HttpStatus.NOT_FOUND));
+
+        Classroom classroom = course.getClassroom();
+
+        if(user.getRole().getName().equals(RoleConstants.ROLE_STUDENT)) {
+            if(!classroom.getStudents().contains(user)){
+                throw new ApiException("Student not in the course classroom", HttpStatus.UNAUTHORIZED);
+            }
+        }
+
+        if(user.getRole().getName().equals(RoleConstants.ROLE_TEACHER)) {
+            if(!course.getTeacher().getEmail().equals(user.getEmail())) {
+                throw new ApiException("You are not the teacher of this course", HttpStatus.UNAUTHORIZED);
+            }
+        }
+
+        byte[] file = azureService.downloadFile(fileName);
+
+        if(file == null) {
+            throw new ApiException("File not found", HttpStatus.NOT_FOUND);
+        }
+
+        return file;
     }
 
 }

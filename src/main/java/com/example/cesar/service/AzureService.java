@@ -6,4 +6,5 @@ import java.io.IOException;
 
 public interface AzureService {
     String uploadFile(MultipartFile file)  throws IOException;
+    byte[] downloadFile(String fileName);
 }
