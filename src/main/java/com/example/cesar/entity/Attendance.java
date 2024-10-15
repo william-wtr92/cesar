@@ -1,5 +1,6 @@
 package com.example.cesar.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,9 +31,11 @@ public class Attendance {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "course_id", referencedColumnName = "id")
+    @JsonIgnore
     private Course course;
 }
