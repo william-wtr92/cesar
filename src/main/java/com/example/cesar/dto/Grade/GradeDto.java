@@ -1,4 +1,4 @@
-package com.example.cesar.dto;
+package com.example.cesar.dto.Grade;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

@@ -1,5 +1,6 @@
 package com.example.cesar.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -27,6 +28,7 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    @JsonIgnore
     private String passwordHash;
 
     private Date birthday;
