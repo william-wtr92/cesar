@@ -14,8 +14,8 @@ Web API for managing courses, students, teachers and documents.
 - [ ] Retrieve a course
 - [ ] List all courses
 - [ ] Filter courses by date and program
-- [ ] Add a student to a course
-- [ ] Add a teacher to a course
+- [x] Add a student to a course
+- [x] Add a teacher to a course
 - [ ] Take attendance
 - [ ] Add a document
 - [x] Send an email to a list of students
