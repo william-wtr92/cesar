@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -120,5 +121,21 @@ public class GradeServiceImpl implements GradeService {
         gradeRepository.delete(grade);
 
         return "Grade deleted successfully";
+    }
+
+    @Override
+    public List<Grade> getGradesByStudent(String studentEmail, UserDetails userDetails) {
+        User student = userRepository.findByEmail(studentEmail).orElseThrow(() -> new ApiException("Student not found", HttpStatus.NOT_FOUND));
+        User userRequest = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));
+
+        if(userRequest.getRole().getName().equals(RoleConstants.ROLE_STUDENT) && !student.getEmail().equals(userRequest.getEmail())) {
+            throw new ApiException("You are not authorized to view this student's grades", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (!student.getRole().getName().equals(RoleConstants.ROLE_STUDENT)) {
+            throw new ApiException("User is not a student", HttpStatus.BAD_REQUEST);
+        }
+
+        return gradeRepository.findAllByStudent(student);
     }
 }
