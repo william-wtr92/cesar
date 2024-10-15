@@ -33,6 +33,6 @@ Web API for managing courses, students, teachers and documents.
 - [x] Add grade to a student for a specific course
 - [x] Update grade
 - [x] Delete grade
-- [ ] Get All grades for a student
+- [x] Get All grades for a student
 - [x] Email a list of students
 - [x] Errors Handling
