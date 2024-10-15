@@ -11,6 +11,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -42,6 +44,15 @@ public class UserController {
         String response = userService.sendEmailToUsers(sendEmailDto);
         ApiResponse apiResponse = new ApiResponse(response, HttpStatus.OK.value(), true);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/{courseId}/download")
+    public ResponseEntity<byte[]> downloadFile(@RequestParam String fileName, @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long courseId) {
+        byte[] file = userService.downloadFile(fileName, courseId, userDetails);
+
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
+                .body(file);
     }
 
 }
