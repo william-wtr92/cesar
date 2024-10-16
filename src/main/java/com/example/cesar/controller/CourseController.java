@@ -63,6 +63,7 @@ public class CourseController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    @Operation(summary = "Delete a course")
     @PreAuthorize("hasRole('"+ RoleConstants.ROLE_ADMIN +"')")
     @DeleteMapping("/{courseId}")
     public ResponseEntity<ApiResponse> deleteCourse(@PathVariable Long courseId) {
