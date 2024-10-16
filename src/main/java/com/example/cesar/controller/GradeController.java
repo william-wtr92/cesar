@@ -7,6 +7,8 @@ import com.example.cesar.service.GradeService;
 import com.example.cesar.utils.constants.RoleConstants;
 import com.example.cesar.utils.response.AllStudentGradesResponse;
 import com.example.cesar.utils.response.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/grades/")
+@Tag(name = "Grades API", description = "Grade management")
 public class GradeController {
 
     private final GradeService gradeService;
@@ -27,6 +30,7 @@ public class GradeController {
         this.gradeService = gradeService;
     }
 
+    @Operation(summary = "Add a new grade")
     @PreAuthorize("hasRole('"+ RoleConstants.ROLE_TEACHER +"')")
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addGrade(@Valid @RequestBody GradeDto gradeDto, @AuthenticationPrincipal UserDetails userDetails) {
@@ -35,6 +39,7 @@ public class GradeController {
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Update a grade")
     @PreAuthorize("hasRole('"+ RoleConstants.ROLE_TEACHER +"')")
     @PutMapping("/{gradeId}/update")
     public ResponseEntity<ApiResponse> updateGrade(@PathVariable Long gradeId, @Valid @RequestBody UpdateGradeDto updateGradeDto, @AuthenticationPrincipal UserDetails userDetails) {
@@ -43,6 +48,7 @@ public class GradeController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    @Operation(summary = "Delete a grade")
     @PreAuthorize("hasRole('"+ RoleConstants.ROLE_TEACHER +"')")
     @DeleteMapping("/{gradeId}/delete")
     public ResponseEntity<ApiResponse> deleteGrade(@PathVariable Long gradeId, @AuthenticationPrincipal UserDetails userDetails) {
@@ -51,6 +57,7 @@ public class GradeController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    @Operation(summary = "Get all grades of a student")
     @PreAuthorize("hasAnyRole('"+ RoleConstants.ROLE_ADMIN +"', '"+ RoleConstants.ROLE_STUDENT +"')")
     @GetMapping("/student")
     public ResponseEntity<ApiResponse> getGradesByStudent(@RequestParam String studentEmail, @AuthenticationPrincipal UserDetails userDetails) {

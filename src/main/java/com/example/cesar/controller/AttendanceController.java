@@ -5,6 +5,8 @@ import com.example.cesar.service.AttendanceService;
 import com.example.cesar.utils.constants.RoleConstants;
 import com.example.cesar.utils.response.ApiResponse;
 import com.example.cesar.utils.response.AttendanceResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/attendances/")
+@Tag(name = "Attendances API", description = "Attendance management")
 public class AttendanceController {
     private final AttendanceService attendanceService;
 
@@ -24,6 +27,7 @@ public class AttendanceController {
         this.attendanceService = attendanceService;
     }
 
+    @Operation(summary = "Start attendance")
     @PreAuthorize("hasAnyRole('"+ RoleConstants.ROLE_ADMIN +"', '"+ RoleConstants.ROLE_TEACHER +"')")
     @GetMapping("/{courseId}/start")
     public ResponseEntity<ApiResponse> startAttendance(@PathVariable Long courseId, @AuthenticationPrincipal UserDetails userDetails) {
@@ -33,6 +37,7 @@ public class AttendanceController {
         return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    @Operation(summary = "Put present in attendance")
     @PreAuthorize("hasAnyRole('"+ RoleConstants.ROLE_STUDENT +"')")
     @GetMapping("/{attendanceId}/present")
     public ResponseEntity<ApiResponse> putPresent(@PathVariable Long attendanceId, @AuthenticationPrincipal UserDetails userDetails) {
@@ -42,6 +47,7 @@ public class AttendanceController {
         return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    @Operation(summary = "Get attendance by ids")
     @PreAuthorize("hasAnyRole('"+ RoleConstants.ROLE_STUDENT +"')")
     @GetMapping("/{attendanceId}")
     public ResponseEntity<ApiResponse> getAttendanceById(@PathVariable Long attendanceId, @AuthenticationPrincipal UserDetails userDetails) {

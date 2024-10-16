@@ -7,6 +7,8 @@ import com.example.cesar.service.ClassroomService;
 import com.example.cesar.utils.constants.RoleConstants;
 import com.example.cesar.utils.response.ApiResponse;
 import com.example.cesar.utils.response.StudentsInClassroomResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/classrooms/")
+@Tag(name = "Classrooms API", description = "Classroom management")
 public class ClassroomController {
     private final ClassroomService classroomService;
 
@@ -26,6 +29,7 @@ public class ClassroomController {
         this.classroomService = classroomService;
     }
 
+    @Operation(summary = "Create a new classroom")
     @PreAuthorize("hasRole('"+ RoleConstants.ROLE_ADMIN +"')")
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createClassroom(@Valid @RequestBody ClassroomCreateDto classroomCreateDto) {
@@ -35,6 +39,7 @@ public class ClassroomController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    @Operation(summary = "Update a classroom")
     @PreAuthorize("hasRole('"+ RoleConstants.ROLE_ADMIN +"')")
     @PutMapping("/update")
     public ResponseEntity<ApiResponse> updateUserClassroom(@Valid @RequestBody UserClassroomDto userClassroomDto) {
@@ -44,6 +49,7 @@ public class ClassroomController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    @Operation(summary = "Get all students in a classroom")
     @GetMapping("/students")
     public ResponseEntity<ApiResponse> getStudentsInClassroom(@RequestParam String classroomName, @AuthenticationPrincipal UserDetails userDetails) {
         List<StudentsInClassroomDto> students = classroomService.getStudentsInClassroom(classroomName, userDetails);
