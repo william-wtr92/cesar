@@ -24,7 +24,6 @@ import java.util.List;
 
 
 @RestController
-@PreAuthorize("hasRole('"+ RoleConstants.ROLE_TEACHER +"')")
 @RequestMapping("/api/courses")
 @Tag(name = "Courses API", description = "Course management")
 @SecurityRequirement(name = "Bearer Authentication")
@@ -36,6 +35,7 @@ public class CourseController {
     }
 
     @Operation(summary = "Get all courses")
+    @PreAuthorize("hasRole('"+ RoleConstants.ROLE_ADMIN +"')")
     @GetMapping
     public ResponseEntity<AllCourseResponse> getAllCourses() {
         List<Course> courses = courseService.getCourses();
@@ -46,23 +46,34 @@ public class CourseController {
 
     @Operation(summary = "Get a single course")
     @GetMapping ("/single")
-    public ResponseEntity<SingleCourseResponse> getSingleCourse(@Valid @RequestBody CourseGetSingleDto courseGetSingleDto) {
-        Course course = courseService.getCourse(courseGetSingleDto);
+    public ResponseEntity<SingleCourseResponse> getSingleCourse(@Valid @RequestBody CourseGetSingleDto courseGetSingleDto,  @AuthenticationPrincipal UserDetails userDetails) {
+        Course course = courseService.getCourse(courseGetSingleDto, userDetails);
         SingleCourseResponse response = new SingleCourseResponse("Course successfully fetched", HttpStatus.OK.value(), true, course);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Operation(summary = "Create a new course")
+    @PreAuthorize("hasRole('"+ RoleConstants.ROLE_ADMIN +"')")
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse> createClassroom(@Valid @RequestBody CourseCreateDto courseCreateDto) {
+    public ResponseEntity<ApiResponse> createCourse(@Valid @RequestBody CourseCreateDto courseCreateDto) {
         String response = courseService.createCourse(courseCreateDto);
         ApiResponse apiResponse = new ApiResponse(response, HttpStatus.OK.value(), true);
 
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('"+ RoleConstants.ROLE_ADMIN +"')")
+    @DeleteMapping("/{courseId}")
+    public ResponseEntity<ApiResponse> deleteCourse(@PathVariable Long courseId) {
+        String response = courseService.deleteCourse(courseId);
+        ApiResponse apiResponse = new ApiResponse(response, HttpStatus.OK.value(), true);
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+
     @Operation(summary = "Upload file")
+    @PreAuthorize("hasRole('"+ RoleConstants.ROLE_TEACHER +"')")
     @PutMapping("/{id}/upload")
     public ResponseEntity<ApiResponse> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails){
         String response = courseService.uploadFile(file, id, userDetails);
