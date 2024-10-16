@@ -51,6 +51,7 @@ jobs:
           chmod 600 /tmp/azure_vm_key.pem
           ssh -o StrictHostKeyChecking=no -i /tmp/azure_vm_key.pem ${{ secrets.AZURE_VM_USER }}@${{ secrets.AZURE_VM_IP }} << 'EOF'
           cd cesar
+          sudo ./gradlew clean build -x test
           sudo docker compose pull
           sudo docker compose up -d --build
           EOF
