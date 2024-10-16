@@ -1,0 +1,68 @@
+name: CI/CD Pipeline for Cesar
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Set up JDK 21
+      - name: Set up JDK 21
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin' # JDK distribution (AdoptOpenJDK Temurin)
+          java-version: '21'
+
+      # Build the application with Gradle
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      # Build the Docker image
+      - name: Build Docker image
+        run: docker build -t cesar-app .
+
+      # Scan Docker image for vulnerabilities using Trivy
+      - name: Security Scan with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: cesar-app
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+
+      # Push Docker image to Docker Hub
+      - name: Log in to Docker Hub
+        run: echo "dckr_pat_TjfWcfAk_FySa1BpFHL3R-nEmJo" | docker login -u "devops9313" --password-stdin
+
+      - name: Push Docker image
+        run: docker tag cesar-app devops9313/cesar-app:latest && docker push devops9313/cesar-app:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      # SSH to the Azure VM
+      - name: SSH to VM
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AZURE_VM_IP }}
+          username: ${{ secrets.AZURE_VM_USER }}
+          key: ${{ secrets.AZURE_VM_SSH_KEY }}
+
+      # Pull the latest Docker image on the VM and restart the container
+      - name: Pull Docker image on VM
+        run: docker pull devops9313/cesar-app:latest
+
+      - name: Restart application
+        run: docker-compose -f /path/to/docker-compose.yml up -d
