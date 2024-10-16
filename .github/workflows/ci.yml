@@ -47,7 +47,9 @@ jobs:
     steps:
       - name: SSH to VM and deploy
         run: |
-          echo "${{ secrets.AZURE_VM_SSH_KEY }}" | ssh -o StrictHostKeyChecking=no -i /dev/stdin ${{ secrets.AZURE_VM_USER }}@${{ secrets.AZURE_VM_IP }} << 'EOF'
+          echo "${{ secrets.AZURE_VM_SSH_KEY }}" > /tmp/azure_vm_key.pem
+          chmod 600 /tmp/azure_vm_key.pem
+          ssh -o StrictHostKeyChecking=no -i /tmp/azure_vm_key.pem ${{ secrets.AZURE_VM_USER }}@${{ secrets.AZURE_VM_IP }} << 'EOF'
           cd cesar || git clone https://github.com/ton-repo-url.git cesar && cd cesar
           docker-compose pull
           docker-compose up -d
