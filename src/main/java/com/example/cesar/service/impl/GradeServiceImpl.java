@@ -1,6 +1,7 @@
 package com.example.cesar.service.impl;
 
-import com.example.cesar.dto.GradeDto;
+import com.example.cesar.dto.Grade.GradeDto;
+import com.example.cesar.dto.Grade.UpdateGradeDto;
 import com.example.cesar.entity.Classroom;
 import com.example.cesar.entity.Course;
 import com.example.cesar.entity.Grade;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,7 +38,7 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public Grade addGrade(GradeDto gradeDto, UserDetails userDetails) {
+    public String addGrade(GradeDto gradeDto, UserDetails userDetails) {
         String email = userDetails.getUsername();
         User teacher = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ApiException("Teacher not found", HttpStatus.NOT_FOUND));
@@ -59,6 +61,10 @@ public class GradeServiceImpl implements GradeService {
             throw new ApiException("Course not found", HttpStatus.NOT_FOUND);
         }
 
+        if(!courseOpt.get().getTeacher().getEmail().equals(userDetails.getUsername())) {
+            throw new ApiException("You are not the teacher of this course", HttpStatus.UNAUTHORIZED);
+        }
+
         Classroom classroom = courseOpt.get().getClassroom();
 
         if(!classroom.getStudents().contains(studentOpt.get())){
@@ -75,6 +81,61 @@ public class GradeServiceImpl implements GradeService {
         grade.setStudent(studentOpt.get());
         grade.setCourse(courseOpt.get());
 
-        return gradeRepository.save(grade);
+        gradeRepository.save(grade);
+
+        return "Grade added successfully";
+    }
+
+    @Override
+    public String updateGrade(Long gradeId, UpdateGradeDto updateGradeDto, UserDetails userDetails) {
+        Grade grade = gradeRepository.findById(gradeId).orElseThrow(() -> new ApiException("Grade not found", HttpStatus.NOT_FOUND));
+
+        Course course = grade.getCourse();
+
+        if(!grade.getStudent().getEmail().equals(updateGradeDto.getStudentEmail())) {
+            throw new ApiException("Grade for this student doesn't exist", HttpStatus.NOT_FOUND);
+        }
+
+        if(!course.getTeacher().getEmail().equals(userDetails.getUsername())) {
+            throw new ApiException("You are not the teacher of this course", HttpStatus.UNAUTHORIZED);
+        }
+
+        grade.setGrade(updateGradeDto.getGrade());
+        grade.setReview(updateGradeDto.getReview());
+
+        gradeRepository.save(grade);
+
+        return "Grade updated successfully";
+    }
+
+    @Override
+    public String deleteGrade(Long gradeId, UserDetails userDetails) {
+        Grade grade = gradeRepository.findById(gradeId).orElseThrow(() -> new ApiException("Grade not found", HttpStatus.NOT_FOUND));
+
+        Course course = grade.getCourse();
+
+        if(!course.getTeacher().getEmail().equals(userDetails.getUsername())) {
+            throw new ApiException("You are not the teacher of this course", HttpStatus.UNAUTHORIZED);
+        }
+
+        gradeRepository.delete(grade);
+
+        return "Grade deleted successfully";
+    }
+
+    @Override
+    public List<Grade> getGradesByStudent(String studentEmail, UserDetails userDetails) {
+        User student = userRepository.findByEmail(studentEmail).orElseThrow(() -> new ApiException("Student not found", HttpStatus.NOT_FOUND));
+        User userRequest = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));
+
+        if(userRequest.getRole().getName().equals(RoleConstants.ROLE_STUDENT) && !student.getEmail().equals(userRequest.getEmail())) {
+            throw new ApiException("You are not authorized to view this student's grades", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (!student.getRole().getName().equals(RoleConstants.ROLE_STUDENT)) {
+            throw new ApiException("User is not a student", HttpStatus.BAD_REQUEST);
+        }
+
+        return gradeRepository.findAllByStudent(student);
     }
 }

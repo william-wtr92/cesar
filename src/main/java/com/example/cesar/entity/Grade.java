@@ -1,5 +1,6 @@
 package com.example.cesar.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,10 +28,12 @@ public class Grade {
 
     @ManyToOne
     @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore
     private User student;
 
     @ManyToOne
     @JoinColumn(name = "course_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore
     private Course course;
 
     @Column(nullable = false)
