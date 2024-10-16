@@ -8,6 +8,7 @@ import com.example.cesar.utils.constants.RoleConstants;
 import com.example.cesar.utils.response.AllStudentGradesResponse;
 import com.example.cesar.utils.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/grades/")
 @Tag(name = "Grades API", description = "Grade management")
+@SecurityRequirement(name = "Bearer Authentication")
 public class GradeController {
 
     private final GradeService gradeService;

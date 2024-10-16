@@ -9,6 +9,7 @@ import com.example.cesar.utils.response.AllCourseResponse;
 import com.example.cesar.utils.response.ApiResponse;
 import com.example.cesar.utils.response.SingleCourseResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import java.util.List;
 @PreAuthorize("hasRole('"+ RoleConstants.ROLE_TEACHER +"')")
 @RequestMapping("/api/courses")
 @Tag(name = "Courses API", description = "Course management")
+@SecurityRequirement(name = "Bearer Authentication")
 public class CourseController {
     private final CourseService courseService;
 

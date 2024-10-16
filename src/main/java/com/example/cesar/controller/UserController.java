@@ -8,6 +8,7 @@ import com.example.cesar.utils.constants.RoleConstants;
 import com.example.cesar.utils.response.ApiResponse;
 import com.example.cesar.utils.response.LoginResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,7 @@ public class UserController {
         return new ResponseEntity<>(loginResponse, HttpStatus.OK);
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "Send email to users")
     @PreAuthorize("hasAnyRole('"+ RoleConstants.ROLE_ADMIN +"', '"+RoleConstants.ROLE_TEACHER+"')")
     @PostMapping("/send-email")
@@ -52,6 +54,7 @@ public class UserController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "Download file")
     @GetMapping("/{courseId}/download")
     public ResponseEntity<byte[]> downloadFile(@RequestParam String fileName, @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long courseId) {
