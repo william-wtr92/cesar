@@ -1,5 +1,6 @@
 package com.example.cesar.service;
 
+import com.example.cesar.dto.Course.AllCoursesByClassroomDto;
 import com.example.cesar.dto.Course.CourseCreateDto;
 import com.example.cesar.dto.Course.CourseGetSingleDto;
 import com.example.cesar.dto.Course.CourseUpdateDto;
@@ -19,6 +20,8 @@ public interface CourseService {
     String updateCourse(CourseUpdateDto courseUpdateDto, Long courseId);
 
     String deleteCourse(Long courseId);
+
+    List<AllCoursesByClassroomDto> getCoursesByClassroom(String classroomName, UserDetails userDetails);
 
     String uploadFile(MultipartFile file, Long courseId, UserDetails userDetails);
 }

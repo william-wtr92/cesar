@@ -1,5 +1,6 @@
 package com.example.cesar.service.impl;
 
+import com.example.cesar.dto.Course.AllCoursesByClassroomDto;
 import com.example.cesar.dto.Course.CourseCreateDto;
 import com.example.cesar.dto.Course.CourseGetSingleDto;
 import com.example.cesar.dto.Course.CourseUpdateDto;
@@ -108,6 +109,25 @@ public class CourseServiceImpl implements CourseService {
         courseRepository.delete(course);
 
         return "Course successfully deleted";
+    }
+
+    @Override
+    public List<AllCoursesByClassroomDto> getCoursesByClassroom(String classroomName, UserDetails userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername()).get();
+
+        if(!classroomRepository.existsByName(classroomName)) {
+            throw new ApiException("Classroom not found", HttpStatus.NOT_FOUND);
+        }
+
+        Classroom classroom = classroomRepository.findByName(classroomName);
+
+        if(!classroom.getStudents().contains(user)) {
+            throw new ApiException("Student does not follow this classroom", HttpStatus.UNAUTHORIZED);
+        }
+
+        return courseRepository.findCoursesByClassroomName(classroomName).stream()
+            .map(course -> mapper.map(course, AllCoursesByClassroomDto.class))
+            .toList();
     }
 
     @Override

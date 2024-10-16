@@ -1,5 +1,6 @@
 package com.example.cesar.controller;
 
+import com.example.cesar.dto.Course.AllCoursesByClassroomDto;
 import com.example.cesar.dto.Course.CourseCreateDto;
 import com.example.cesar.dto.Course.CourseGetSingleDto;
 import com.example.cesar.dto.Course.CourseUpdateDto;
@@ -7,6 +8,7 @@ import com.example.cesar.entity.Course;
 import com.example.cesar.service.CourseService;
 import com.example.cesar.utils.constants.RoleConstants;
 import com.example.cesar.utils.response.AllCourseResponse;
+import com.example.cesar.utils.response.AllCoursesByClassroomResponse;
 import com.example.cesar.utils.response.ApiResponse;
 import com.example.cesar.utils.response.SingleCourseResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -82,6 +84,15 @@ public class CourseController {
         ApiResponse apiResponse = new ApiResponse(response, HttpStatus.OK.value(), true);
 
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get courses by classroom")
+    @GetMapping("/classroom")
+    public ResponseEntity<AllCoursesByClassroomResponse> getCoursesByClassroom(@RequestParam String classroomName, @AuthenticationPrincipal UserDetails userDetails) {
+        List<AllCoursesByClassroomDto> courses = courseService.getCoursesByClassroom(classroomName, userDetails);
+        AllCoursesByClassroomResponse response = new AllCoursesByClassroomResponse("Courses successfully fetched", HttpStatus.OK.value(), true, courses);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
