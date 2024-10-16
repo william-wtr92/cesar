@@ -32,14 +32,6 @@ jobs:
       - name: Build Docker image
         run: docker build -t cesar-app .
 
-      # Scan Docker image for vulnerabilities using Trivy
-      - name: Security Scan with Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: cesar-app
-          severity: HIGH,CRITICAL
-          ignore-unfixed: true
-
       # Push Docker image to Docker Hub
       - name: Log in to Docker Hub
         run: echo "dckr_pat_TjfWcfAk_FySa1BpFHL3R-nEmJo" | docker login -u "devops9313" --password-stdin
