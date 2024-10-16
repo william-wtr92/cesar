@@ -14,6 +14,9 @@ Web API for managing courses, students, teachers and documents.
 - Start Azurite : `azurite --location ./azurite/data --silent --debug ./azurite/logs/debug.log`
 - SMTP credentials like `SendGrid` or `Mailgun`
 
+- Install K6 : `brew install k6`
+- Run K6 : `cd /k6/ && k6 run --compatibility-mode=experimental_enhanced script.ts`
+
 # Features 
 
 - [x] Register
