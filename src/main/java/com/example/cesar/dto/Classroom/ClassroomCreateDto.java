@@ -1,6 +1,5 @@
-package com.example.cesar.dto;
+package com.example.cesar.dto.Classroom;
 
-import com.example.cesar.entity.User;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;

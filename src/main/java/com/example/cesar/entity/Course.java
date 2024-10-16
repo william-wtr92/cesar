@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,6 +26,11 @@ public class Course {
     private Date startDate;
 
     private Date endDate;
+
+    @ElementCollection
+    @CollectionTable(name = "courses_files", joinColumns = @JoinColumn(name = "course_id"))
+    @Column(name = "file_url")
+    private List<String> urlFiles;
 
     @ManyToOne
     @JoinColumn(name = "classroom_id", referencedColumnName = "id")
