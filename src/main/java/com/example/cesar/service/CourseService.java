@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface CourseService {
-    Course getCourse(CourseGetSingleDto courseGetSingleDto);
+    Course getCourse(CourseGetSingleDto courseGetSingleDto, UserDetails userDetails);
 
     List<Course> getCourses();
 
@@ -17,7 +17,7 @@ public interface CourseService {
 
     String updateCourse();
 
-    String deleteCourse();
+    String deleteCourse(Long courseId);
 
     String uploadFile(MultipartFile file, Long courseId, UserDetails userDetails);
 }
