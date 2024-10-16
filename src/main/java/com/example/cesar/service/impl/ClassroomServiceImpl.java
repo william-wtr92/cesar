@@ -1,5 +1,6 @@
 package com.example.cesar.service.impl;
 
+import com.example.cesar.dto.Classroom.AllClassroomsDto;
 import com.example.cesar.dto.Classroom.ClassroomCreateDto;
 import com.example.cesar.dto.Classroom.StudentsInClassroomDto;
 import com.example.cesar.dto.User.UserClassroomDto;
@@ -79,6 +80,15 @@ public class ClassroomServiceImpl implements ClassroomService {
 
         return students.stream()
                 .map(student -> mapper.map(student, StudentsInClassroomDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AllClassroomsDto> getAllClassrooms() {
+        List<Classroom> classrooms = classroomRepository.findAll();
+
+        return classrooms.stream()
+                .map(classroom -> mapper.map(classroom, AllClassroomsDto.class))
                 .collect(Collectors.toList());
     }
 }

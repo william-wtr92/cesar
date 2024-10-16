@@ -1,10 +1,12 @@
 package com.example.cesar.controller;
 
+import com.example.cesar.dto.Classroom.AllClassroomsDto;
 import com.example.cesar.dto.Classroom.ClassroomCreateDto;
 import com.example.cesar.dto.Classroom.StudentsInClassroomDto;
 import com.example.cesar.dto.User.UserClassroomDto;
 import com.example.cesar.service.ClassroomService;
 import com.example.cesar.utils.constants.RoleConstants;
+import com.example.cesar.utils.response.AllClassroomResponse;
 import com.example.cesar.utils.response.ApiResponse;
 import com.example.cesar.utils.response.StudentsInClassroomResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,6 +58,16 @@ public class ClassroomController {
     public ResponseEntity<ApiResponse> getStudentsInClassroom(@RequestParam String classroomName, @AuthenticationPrincipal UserDetails userDetails) {
         List<StudentsInClassroomDto> students = classroomService.getStudentsInClassroom(classroomName, userDetails);
         StudentsInClassroomResponse response = new StudentsInClassroomResponse("Students successfully fetched", HttpStatus.OK.value(), true, students);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get all classes")
+    @PreAuthorize("hasRole('"+ RoleConstants.ROLE_ADMIN +"')")
+    @GetMapping("/all")
+    public ResponseEntity<AllClassroomResponse> getAllClassrooms() {
+        List<AllClassroomsDto> classrooms = classroomService.getAllClassrooms();
+        AllClassroomResponse response = new AllClassroomResponse("Classrooms successfully fetched", HttpStatus.OK.value(), true, classrooms);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
