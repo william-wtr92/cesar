@@ -17,7 +17,7 @@ public interface CourseService {
 
     String updateCourse();
 
-    String deleteCourse();
+    String deleteCourse(Long courseId);
 
     String uploadFile(MultipartFile file, Long courseId, UserDetails userDetails);
 }

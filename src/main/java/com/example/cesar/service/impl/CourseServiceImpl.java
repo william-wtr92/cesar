@@ -77,8 +77,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public String deleteCourse() {
-        return null;
+    public String deleteCourse(Long courseId) {
+        Course course = courseRepository.findById(courseId).orElseThrow(() -> new ApiException("Course not found", HttpStatus.NOT_FOUND));
+
+        courseRepository.delete(course);
+
+        return "Course successfully deleted";
     }
 
     @Override

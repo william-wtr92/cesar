@@ -21,7 +21,7 @@ import java.util.List;
 
 
 @RestController
-@PreAuthorize("hasRole('"+ RoleConstants.ROLE_TEACHER +"')")
+@PreAuthorize("hasRole('"+ RoleConstants.ROLE_ADMIN +"')")
 @RequestMapping("/api/courses")
 public class CourseController {
     private final CourseService courseService;
@@ -47,13 +47,20 @@ public class CourseController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse> createClassroom(@Valid @RequestBody CourseCreateDto courseCreateDto) {
+    public ResponseEntity<ApiResponse> createCourse(@Valid @RequestBody CourseCreateDto courseCreateDto) {
         String response = courseService.createCourse(courseCreateDto);
         ApiResponse apiResponse = new ApiResponse(response, HttpStatus.OK.value(), true);
 
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{courseId}")
+    public ResponseEntity<ApiResponse> deleteCourse(@PathVariable Long courseId) {
+        String response = courseService.deleteCourse(courseId);
+        ApiResponse apiResponse = new ApiResponse(response, HttpStatus.OK.value(), true);
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
 
     @PutMapping("/{id}/upload")
     public ResponseEntity<ApiResponse> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails){

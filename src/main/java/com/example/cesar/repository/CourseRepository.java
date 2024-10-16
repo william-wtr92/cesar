@@ -15,6 +15,8 @@ public interface CourseRepository extends JpaRepository <Course, Long> {
             String teacherEmail
     );
 
+    boolean existsById(Long courseId);
+
     Optional<Course> findCourseByNameAndAndClassroomNameAndStartDate(
             String courseName,
             String classroomName,
