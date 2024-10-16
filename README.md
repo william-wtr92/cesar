@@ -2,6 +2,10 @@
 
 Web API for managing courses, students, teachers and documents.
 
+# Swagger UI
+
+- [Swagger UI](http://localhost:8080/swagger-ui.html) 
+
 # Getting Started
 
 ## Prerequisites

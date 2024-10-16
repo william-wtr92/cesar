@@ -8,6 +8,9 @@ import com.example.cesar.utils.constants.RoleConstants;
 import com.example.cesar.utils.response.AllCourseResponse;
 import com.example.cesar.utils.response.ApiResponse;
 import com.example.cesar.utils.response.SingleCourseResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/courses")
+@Tag(name = "Courses API", description = "Course management")
+@SecurityRequirement(name = "Bearer Authentication")
 public class CourseController {
     private final CourseService courseService;
 
@@ -29,6 +34,7 @@ public class CourseController {
         this.courseService = courseService;
     }
 
+    @Operation(summary = "Get all courses")
     @PreAuthorize("hasRole('"+ RoleConstants.ROLE_ADMIN +"')")
     @GetMapping
     public ResponseEntity<AllCourseResponse> getAllCourses() {
@@ -38,6 +44,7 @@ public class CourseController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "Get a single course")
     @GetMapping ("/single")
     public ResponseEntity<SingleCourseResponse> getSingleCourse(@Valid @RequestBody CourseGetSingleDto courseGetSingleDto,  @AuthenticationPrincipal UserDetails userDetails) {
         Course course = courseService.getCourse(courseGetSingleDto, userDetails);
@@ -46,6 +53,7 @@ public class CourseController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "Create a new course")
     @PreAuthorize("hasRole('"+ RoleConstants.ROLE_ADMIN +"')")
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createCourse(@Valid @RequestBody CourseCreateDto courseCreateDto) {
@@ -55,6 +63,7 @@ public class CourseController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    @Operation(summary = "Delete a course")
     @PreAuthorize("hasRole('"+ RoleConstants.ROLE_ADMIN +"')")
     @DeleteMapping("/{courseId}")
     public ResponseEntity<ApiResponse> deleteCourse(@PathVariable Long courseId) {
@@ -64,6 +73,7 @@ public class CourseController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    @Operation(summary = "Upload file")
     @PreAuthorize("hasRole('"+ RoleConstants.ROLE_TEACHER +"')")
     @PutMapping("/{id}/upload")
     public ResponseEntity<ApiResponse> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails){
