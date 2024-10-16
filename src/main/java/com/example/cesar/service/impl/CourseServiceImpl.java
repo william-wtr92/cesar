@@ -2,6 +2,7 @@ package com.example.cesar.service.impl;
 
 import com.example.cesar.dto.Course.CourseCreateDto;
 import com.example.cesar.dto.Course.CourseGetSingleDto;
+import com.example.cesar.dto.Course.CourseUpdateDto;
 import com.example.cesar.entity.Classroom;
 import com.example.cesar.entity.Course;
 import com.example.cesar.entity.User;
@@ -72,8 +73,32 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public String updateCourse() {
-        return null;
+    public String updateCourse(CourseUpdateDto courseUpdateDto, Long courseId) {
+        Course course = courseRepository.findById(courseId).orElseThrow(() -> new ApiException("Course not found", HttpStatus.NOT_FOUND));
+
+        if(userRepository.findByEmail(courseUpdateDto.getTeacherEmail()).isEmpty()) {
+            throw new ApiException("This teacher email does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        if(!classroomRepository.existsByName(courseUpdateDto.getClassroomName())) {
+            throw new ApiException("This classroom does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        if(courseUpdateDto.getStartDate().before(course.getEndDate())) {
+            throw new ApiException("Start date must be after end date", HttpStatus.BAD_REQUEST);
+        }
+
+        Classroom currentClassroom = classroomRepository.findByName(courseUpdateDto.getClassroomName());
+
+        course.setName(courseUpdateDto.getName());
+        course.setStartDate(courseUpdateDto.getStartDate());
+        course.setEndDate(courseUpdateDto.getEndDate());
+        course.setClassroom(currentClassroom);
+        course.setTeacher(userRepository.findByEmail(courseUpdateDto.getTeacherEmail()).get());
+
+        courseRepository.save(course);
+
+        return "Course successfully updated";
     }
 
     @Override
