@@ -86,12 +86,18 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course getCourse(CourseGetSingleDto courseGetSingleDto) {
+    public Course getCourse(CourseGetSingleDto courseGetSingleDto, UserDetails userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername()).get();
+
         Optional<Course> course = courseRepository.findCourseByNameAndAndClassroomNameAndStartDate(
             courseGetSingleDto.getCourseName(),
                 courseGetSingleDto.getClassroomName(),
                 courseGetSingleDto.getStartDate()
         );
+
+        if(!course.get().getClassroom().getStudents().contains(user)) {
+            throw new ApiException("Student does not follow this course", HttpStatus.UNAUTHORIZED);
+        }
 
         if(course.get() == null) {
             throw new ApiException("Course not found", HttpStatus.NOT_FOUND);

@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface CourseService {
-    Course getCourse(CourseGetSingleDto courseGetSingleDto);
+    Course getCourse(CourseGetSingleDto courseGetSingleDto, UserDetails userDetails);
 
     List<Course> getCourses();
 
