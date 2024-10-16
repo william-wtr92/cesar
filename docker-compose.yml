@@ -38,6 +38,18 @@ services:
     networks:
       - cesar-network
 
+  azurite:
+    image: "mcr.microsoft.com/azure-storage/azurite"
+    hostname: azurite
+    restart: always
+    command: 'azurite --loose --blobHost 0.0.0.0 --blobPort 10000 --location /workspace --debug /workspace/debug.log'
+    ports:
+      - "10000:10000"
+    volumes:
+      - ./azurite:/workspace
+    networks:
+      - cesar-network
+
 volumes:
   postgres-data:
 
