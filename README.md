@@ -16,6 +16,7 @@ Web API for managing courses, students, teachers and documents.
 - [x] Login
 - [x] Add a classroom
 - [x] Update user classroom
+- [x] Retrieve students classroom
 - [x] Add a course
 - [ ] Delete a course
 - [ ] Edit a course
